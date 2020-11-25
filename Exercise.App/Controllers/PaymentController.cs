@@ -3,6 +3,7 @@ using Exercise.Interface.Service;
 using Exercise.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Exercise.App.Controllers
 {
@@ -28,21 +29,24 @@ namespace Exercise.App.Controllers
 
         [HttpPost]
         [Route("[controller]/[action]")]
-        public StatusCodeResult ProcessPayment(PaymentDTM paymentDTM)
+        public async Task<StatusCodeResult> ProcessPaymentAsync(PaymentDTM paymentDTM)
         {
             var result = new OperationResult<Payment>();
+
             switch (paymentDTM.Amount)
             {
                 case > 500:
-                    result = _premiumPaymentService.PremiumPaymentAsync(paymentDTM)
+                    result = await _premiumPaymentService.PremiumPaymentAsync(paymentDTM);
                     break;
-                case > 21: break;
-                default: break;
+                case > 21:
+                    result = await _expensivePaymentGateway.ExpensivePaymentAsync(paymentDTM);
+                    break;
+                default:
+                    result = await _cheapPaymentGateway.CheapPaymentAsync(paymentDTM);
+                    break;
             }
-
-
-
-            return new StatusCodeResult(200);
+             
+            return new StatusCodeResult((int)result.StatusCode) ;
         }
     }
 }

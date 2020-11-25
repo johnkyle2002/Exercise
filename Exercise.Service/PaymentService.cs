@@ -1,4 +1,6 @@
-﻿using Exercise.DataTransferModel;
+﻿using AutoMapper;
+using Exercise.Common.Enumerator;
+using Exercise.DataTransferModel;
 using Exercise.Interface.Repository;
 using Exercise.Interface.Service;
 using Exercise.Model;
@@ -18,10 +20,17 @@ namespace Exercise.Service
             _logger = logger;
         }
 
-        public async System.Threading.Tasks.Task<OperationResult<Payment>> CheapPaymentAsync(Payment payment)
+        MapperConfiguration cpmfig = new MapperConfiguration(c => c.CreateMap<PaymentDTM, Payment>());
+
+        public async System.Threading.Tasks.Task<OperationResult<Payment>> CheapPaymentAsync(PaymentDTM paymentDTM)
         {
-            if (payment.Amount <= 20)
+            if (paymentDTM.Amount <= 20)
+            {
+                var mapper = new Mapper(cpmfig);
+                var payment = mapper.Map<Payment>(paymentDTM);
+
                 return await _paymentRepository.PaymentAsync(payment);
+            }
 
             return new OperationResult<Payment>
             {
@@ -30,10 +39,15 @@ namespace Exercise.Service
             };
         }
 
-        public async System.Threading.Tasks.Task<OperationResult<Payment>> ExpensivePaymentAsync(Payment payment)
+        public async System.Threading.Tasks.Task<OperationResult<Payment>> ExpensivePaymentAsync(PaymentDTM paymentDTM)
         {
-            if (payment.Amount > 20 && payment.Amount <= 500)
+            if (paymentDTM.Amount > 20 && paymentDTM.Amount <= 500)
+            {
+                var mapper = new Mapper(cpmfig);
+                var payment = mapper.Map<Payment>(paymentDTM);
+
                 return await _paymentRepository.PaymentAsync(payment);
+            }
 
             return new OperationResult<Payment>
             {
@@ -42,15 +56,19 @@ namespace Exercise.Service
             };
         }
 
-        public async System.Threading.Tasks.Task<OperationResult<Payment>> PremiumPaymentAsync(Payment payment)
-        {
-            if (payment.Amount > 500)
+        public async System.Threading.Tasks.Task<OperationResult<Payment>> PremiumPaymentAsync(PaymentDTM paymentDTM)
+        { 
+            if (paymentDTM.Amount > 500)
+            {
+                var mapper = new Mapper(cpmfig);
+                var payment = mapper.Map<Payment>(paymentDTM);
                 return await _paymentRepository.PaymentAsync(payment);
-
+            }
+            
             return new OperationResult<Payment>
             {
                 Succeeded = false,
-                StatusCode = System.Net.HttpStatusCode.BadRequest
+                StatusCode =  System.Net.HttpStatusCode.BadRequest
             };
         }
     }

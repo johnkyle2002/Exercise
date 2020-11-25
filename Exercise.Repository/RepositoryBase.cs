@@ -1,4 +1,4 @@
-﻿using Exercise.Interface.Repositroy;
+﻿using Exercise.Interface.Repository;
 using Exercise.Repository.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

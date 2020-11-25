@@ -6,6 +6,6 @@ namespace Exercise.Interface.Service
 {
     public interface ICheapPaymentGateway
     {
-        Task<OperationResult<Payment>> CheapPaymentAsync(Payment payment);
+        Task<OperationResult<Payment>> CheapPaymentAsync(PaymentDTM payment);
     }
 }

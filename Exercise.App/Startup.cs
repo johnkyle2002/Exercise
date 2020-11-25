@@ -1,22 +1,15 @@
-using Exercise.Interface.Repositroy;
+using Exercise.Interface.Repository;
 using Exercise.Interface.Service;
 using Exercise.Repository;
 using Exercise.Repository.DBContext;
 using Exercise.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Exercise.App
 {
@@ -42,12 +35,14 @@ namespace Exercise.App
             #region Repository
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
             #endregion
 
             #region Service
 
-            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<ICheapPaymentGateway, PaymentService>();
+            services.AddScoped<IExpensivePaymentGateway, PaymentService>();
+            services.AddScoped<IPremiumPaymentService, PaymentService>();
 
             #endregion
 
