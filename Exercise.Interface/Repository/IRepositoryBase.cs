@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Exercise.Interface.Repositroy
+namespace Exercise.Interface.Repository
 {
     public interface IRepositoryBase<TEntity> where TEntity : class
     {

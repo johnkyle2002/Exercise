@@ -1,6 +1,11 @@
-﻿namespace Exercise.Interface.Service
+﻿using Exercise.DataTransferModel;
+using Exercise.Model;
+using System.Threading.Tasks;
+
+namespace Exercise.Interface.Service
 {
     public interface IPremiumPaymentService
     {
+        Task<OperationResult<Payment>> PremiumPaymentAsync(Payment payment);
     }
 }
